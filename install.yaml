@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: kspeeder
+  name: mirror
+---
+apiVersion: v1
+data:
+  check.sh: |
+    #!/bin/sh
+
+    USAGE=$(du -sm /kspeeder-data | cut -f1)
+    MAX_SIZE=4096  # 4GB = 4096MB
+
+    if [ "$USAGE" -gt "$MAX_SIZE" ]; then
+        echo "Data directory usage ${USAGE}MB exceeds ${MAX_SIZE}MB"
+        exit 1
+    fi
+
+    exit 0
+  kspeeder.yml: |
+    mirrors:
+      - url: "https://docker.1ms.run"
+      - url: "https://docker.1panel.live"
+      - url: "https://docker.367231.xyz"
+      - url: "https://docker.amingg.com"
+      - url: "https://docker.m.daocloud.io"
+      - url: "https://docker.m.ixdev.cn"
+      - url: "https://dockerproxy.net"
+      - url: "https://hub.1panel.dev"
+      - url: "https://image.cloudlayer.icu"
+kind: ConfigMap
+metadata:
+  labels:
+    app: kspeeder
+  name: kspeeder-config-45kddmfb7h
+  namespace: mirror
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kspeeder
+  name: kspeeder-server
+  namespace: mirror
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kspeeder
+  template:
+    metadata:
+      labels:
+        app: kspeeder
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: Asia/Shanghai
+        image: registry.kspeeder.com/linkease/kspeeder:0.7.14
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - /healthcheck/check.sh
+          failureThreshold: 3
+          initialDelaySeconds: 1800
+          periodSeconds: 189
+          timeoutSeconds: 10
+        name: kspeeder
+        ports:
+        - containerPort: 5443
+          hostPort: 5443
+          protocol: TCP
+        - containerPort: 5003
+          hostPort: 5003
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /healthcheck/check.sh
+          name: config
+          readOnly: true
+          subPath: check.sh
+        - mountPath: /kspeeder-config/kspeeder.yml
+          name: config
+          readOnly: true
+          subPath: kspeeder.yml
+        - mountPath: /kspeeder-data
+          name: data
+          readOnly: false
+      hostNetwork: true
+      volumes:
+      - configMap:
+          defaultMode: 493
+          name: kspeeder-config-45kddmfb7h
+        name: config
+      - emptyDir: {}
+        name: data

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  template:
+    spec:
+      containers:
+      - name: kspeeder
+        image: registry.kspeeder.com/linkease/kspeeder
+        env:
+        - name: TZ
+          value: "Asia/Shanghai"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - /healthcheck/check.sh
+          failureThreshold: 3
+          initialDelaySeconds: 1800
+          periodSeconds: 189
+          timeoutSeconds: 10
+        ports:
+        - containerPort: 5443
+          hostPort: 5443
+          protocol: TCP
+        - containerPort: 5003
+          hostPort: 5003
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          mountPath: /healthcheck/check.sh
+          subPath: check.sh
+          readOnly: true
+        - name: config
+          mountPath: /kspeeder-config/kspeeder.yml
+          subPath: kspeeder.yml
+          readOnly: true
+        - name: data
+          mountPath: /kspeeder-data
+          readOnly: false
+      hostNetwork: true
+      volumes:
+      - name: config
+        configMap:
+          name: config
+          defaultMode: 0755
+      - name: data
+        emptyDir: {}
