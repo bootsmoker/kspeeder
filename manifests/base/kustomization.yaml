@@ -1,28 +1,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-images:
-- name: registry.kspeeder.com/linkease/kspeeder
-  newTag: 0.7.14
-
-labels:
-- includeSelectors: true
-  pairs:
-    app: kspeeder
-
-namePrefix: kspeeder-
-namespace: mirror
-
 configMapGenerator:
 - name: config
   files:
   - config/check.sh
   - config/kspeeder.yml
 
-replicas:
-- name: server
-  count: 1
+images:
+- name: registry.kspeeder.com/linkease/kspeeder
+  newTag: 0.7.14
+
+labels:
+- includeSelectors: true
+  includeTemplates: true
+  pairs:
+    app: kspeeder
 
 resources:
 - deployment.yaml
-- namespace.yaml

@@ -9,11 +9,11 @@
 安装 / 升级
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/bootsmoker/kspeeder/HEAD/install.yaml
+kubectl apply -f https://raw.githubusercontent.com/bootsmoker/kspeeder/HEAD/install-smoker.yaml
 ```
 
 卸载
 
 ```bash
-kubectl delete -f https://raw.githubusercontent.com/bootsmoker/kspeeder/HEAD/install.yaml
+kubectl delete -f https://raw.githubusercontent.com/bootsmoker/kspeeder/HEAD/install-smoker.yaml
 ```
