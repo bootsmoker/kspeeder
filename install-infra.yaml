@@ -36,7 +36,7 @@ metadata:
   labels:
     app: kspeeder
     env: infra
-  name: kspeeder-server
+  name: kspeeder
 spec:
   replicas: 1
   selector:

@@ -7,11 +7,5 @@ labels:
   pairs:
     env: infra
 
-namePrefix: kspeeder-
-
-replicas:
-- name: server
-  count: 1
-
 resources:
 - ../../base

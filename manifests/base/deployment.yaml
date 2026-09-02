@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server
+  name: kspeeder
 spec:
   template:
     spec:
@@ -43,7 +43,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: config
+          name: kspeeder-config
           defaultMode: 0755
       - name: data
         emptyDir: {}

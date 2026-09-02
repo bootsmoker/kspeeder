@@ -40,7 +40,7 @@ kind: Deployment
 metadata:
   labels:
     app: kspeeder
-  name: kspeeder-server
+  name: kspeeder
   namespace: mirror
 spec:
   replicas: 1
