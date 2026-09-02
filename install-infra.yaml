@@ -30,24 +30,44 @@ metadata:
     env: infra
   name: kspeeder-config-45kddmfb7h
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kspeeder
+    env: infra
+  name: kspeeder-service
+spec:
+  ports:
+  - name: http
+    port: 5003
+    targetPort: 5003
+  selector:
+    app: kspeeder
+    env: infra
+    svc: server
+  type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: kspeeder
     env: infra
-  name: kspeeder
+  name: kspeeder-server
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: kspeeder
       env: infra
+      svc: server
   template:
     metadata:
       labels:
         app: kspeeder
         env: infra
+        svc: server
     spec:
       containers:
       - env:
@@ -91,3 +111,30 @@ spec:
         name: config
       - emptyDir: {}
         name: data
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: cert-manager-cluster-issuer
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  labels:
+    env: infra
+  name: kspeeder-ingress
+spec:
+  rules:
+  - host: kspeeder.infra.an
+    http:
+      paths:
+      - backend:
+          service:
+            name: kspeeder-service
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - kspeeder.infra.an
+    secretName: kspeeder-server-tls

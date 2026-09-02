@@ -1,9 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kspeeder
+  name: server
 spec:
+  selector:
+    matchLabels:
+      svc: server
   template:
+    metadata:
+      labels:
+        svc: server
     spec:
       containers:
       - name: kspeeder
@@ -43,7 +49,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: kspeeder-config
+          name: config
           defaultMode: 0755
       - name: data
         emptyDir: {}

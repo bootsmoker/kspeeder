@@ -35,22 +35,41 @@ metadata:
   name: kspeeder-config-45kddmfb7h
   namespace: mirror
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kspeeder
+  name: kspeeder-service
+  namespace: mirror
+spec:
+  ports:
+  - name: http
+    port: 5003
+    targetPort: 5003
+  selector:
+    app: kspeeder
+    svc: server
+  type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: kspeeder
-  name: kspeeder
+  name: kspeeder-server
   namespace: mirror
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: kspeeder
+      svc: server
   template:
     metadata:
       labels:
         app: kspeeder
+        svc: server
     spec:
       containers:
       - env:

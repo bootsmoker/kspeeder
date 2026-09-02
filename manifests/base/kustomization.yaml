@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 configMapGenerator:
-- name: kspeeder-config
+- name: config
   files:
   - config/check.sh
   - config/kspeeder.yml
@@ -18,8 +18,9 @@ labels:
     app: kspeeder
 
 replicas:
-- name: kspeeder
+- name: server
   count: 1
 
 resources:
 - deployment.yaml
+- service.yaml
