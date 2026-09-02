@@ -16,8 +16,8 @@ namespace: mirror
 configMapGenerator:
 - name: config
   files:
-  - check.sh
-  - kspeeder.yml
+  - config/check.sh
+  - config/kspeeder.yml
 
 replicas:
 - name: server
