@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+- includeSelectors: true
+  includeTemplates: true
+  pairs:
+    env: infra
+
+namePrefix: kspeeder-
+
+replicas:
+- name: server
+  count: 1
+
+resources:
+- ../../base
