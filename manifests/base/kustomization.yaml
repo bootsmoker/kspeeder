@@ -22,5 +22,5 @@ replicas:
   count: 1
 
 resources:
-- deployment.yaml
 - service.yaml
+- statefulset.yaml
