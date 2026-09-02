@@ -4,6 +4,7 @@ KUSTOMIZE ?= kustomize
 
 build:
 	$(KUSTOMIZE) build manifests/overlays/infra > install-infra.yaml
+	$(KUSTOMIZE) build manifests/overlays/spare > install-spare.yaml
 	$(KUSTOMIZE) build manifests/overlays/smoker > install-smoker.yaml
 
 clean:
