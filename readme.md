@@ -2,6 +2,7 @@
 
 > Docker 镜像加速专家
 
+版本列表：<https://github.com/kspeeder/docker_kspeeder/releases>
 镜像仓库：<https://hub.docker.com/linkease/kspeeder>
 
 ## 快速开始

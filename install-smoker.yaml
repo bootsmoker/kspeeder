@@ -75,7 +75,7 @@ spec:
       - env:
         - name: TZ
           value: Asia/Shanghai
-        image: registry.kspeeder.com/linkease/kspeeder:0.7.14
+        image: registry.kspeeder.com/linkease/kspeeder:0.8.4
         livenessProbe:
           exec:
             command:
